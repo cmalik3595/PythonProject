@@ -27,7 +27,6 @@ np_max = []
 np_quantile = []
 column_names = ["SepalLenCm", "SepalWidthCm", "PetalLenCm", "PetalWidthCm", "Type"]
 
-rf_classifier_object = RandomForestClassifier()
 fp = ""
 scatter_path = ""
 box_path = ""
@@ -390,7 +389,6 @@ def fit_random_forest():
     global X_test
     global y_train
     global y_test
-    global rf_classifier_object
 
     # Add RandomForrest classifier object
     rf_classifier_object = RandomForestClassifier(
@@ -401,15 +399,14 @@ def fit_random_forest():
 
     print("RandomForestClassifier Stats:")
     display_metrics(y_test, y_pred)
-    pass
+    return r2_score(y_test, y_pred)
 
 
-def send_to_pipeline():
+def rfs_pipeline():
     global X_train
     global X_test
     global y_train
     global y_test
-    global rf_classifier_object
 
     rf_pipe = Pipeline(
         [
@@ -423,6 +420,14 @@ def send_to_pipeline():
 
     print("PP(StdScaler + RandomForrestRegression):")
     display_metrics(y_test, y_pred)
+    return r2_score(y_test, y_pred)
+
+
+def cfs_pipeline():
+    global X_train
+    global X_test
+    global y_train
+    global y_test
 
     cf_pipe = Pipeline(
         [
@@ -435,7 +440,7 @@ def send_to_pipeline():
 
     print("PP(RandomTreesEmbedding + LogisticRegression):")
     display_metrics(y_test, y_pred)
-    pass
+    return r2_score(y_test, y_pred)
 
 
 # Defining main function
@@ -446,7 +451,8 @@ def main():
     plot_stats()
     model_standard_scaler()
     fit_random_forest()
-    send_to_pipeline()
+    rfs_pipeline()
+    cfs_pipeline()
 
 
 # Using the special variable
