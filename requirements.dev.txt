@@ -200,6 +200,8 @@ platformdirs==2.5.2
     #   virtualenv
 pre-commit==2.20.0
     # via -r requirements.dev.in
+prettier==0.0.7
+    # via -r requirements.dev.in
 prometheus-client==0.14.1
     # via
     #   jupyter-server
