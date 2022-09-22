@@ -2,29 +2,25 @@ This is Assignment#2 of BDA-602 course.
 
 Description
 The testsuite performs below operations.
+
 1. Import the baseball.sql from the tarball downloaded from URL.
 2. Create "baseball" database.
 3. Load the tables into database.
 4. Perform unit tests on the database.
-	4.1 Check the total average of the batter
-	4.2 Check the annual average of the batter
-	4.3 Check the 100day rolling average of the batter
-	4.4 Check the 100day rolling average of the batter for a specific date.
+   4.1 Check the total average of the batter
+   4.2 Check the annual average of the batter
+   4.3 Check the 100day rolling average of the batter
+   4.4 Check the 100day rolling average of the batter for a specific date.
 
 We created a script for doing all above operations and no manual intervention is needed
 after the script is run. The script has to be RUN ONLY ONCE during the test and it takes
-2.5 hours for database to get populated. 
+2.5 hours for database to get populated.
 
-Once the start_test.sh script is run, we leave the database tables for the user to play with. 
+Once the start_test.sh script is run, we leave the database tables for the user to play with.
 
 Usage: ./start_test.sh <root password>
 
-
 Note
-An attempt was made to reduce the timings of the overall run but it failed due to mysql 
+An attempt was made to reduce the timings of the overall run but it failed due to mysql
 not supporting "PARTITION BY" functionality. Hopefully, the "PARTITION BY" will give the
 better results.
-
-
-
-
