@@ -86,7 +86,7 @@ CREATE TABLE batter_rolling_100
 		ON batters_info1.batter = batters_info2.batter	
 		WHERE batters_info2.game_date BETWEEN batters_info1.100_day_before_date AND DATE(batters_info1.game_date) 
 	GROUP BY batter,game_date
-	ORDER BY batter,game_date limit 0,10;
+	ORDER BY batter,game_date;
 
 SELECT '100 day Rolling Average operation completed !!' AS '';
 select now() as 'Completion Time';

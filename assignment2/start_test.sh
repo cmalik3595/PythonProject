@@ -66,5 +66,4 @@ mysql -u root -p${PW} baseball < test_baseball_assignment.sql
 echo "Test complete. Cleanup repository"
 rm baseball.sql
 
-rm 
 trap cleanup EXIT
