@@ -11,11 +11,12 @@
 
 #!/bin/bash
 
-FILE=baseball.sql.tar.gz
+BASEBALL_TAR_FILE=baseball.sql.tar.gz
+BASEBALL_SQL_BASEBALL_TAR_FILE=baseball.sql
 PW=$1
 
 function cleanup {
-	killall -9 mysql
+	killall -9 mysql 2>/dev/null
 }
 
 if [ -z "$1" ]; then
@@ -29,8 +30,9 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 echo "Starting Assgnment 2 script. Please wait to enter root password"
-
-if [[ -f "$FILE" ]]; then
+# Download the database if DB sql file is not present 
+if ! [[ -f "$BASEBALL_SQL_BASEBALL_TAR_FILE" ]]; then
+if [[ -f "$BASEBALL_TAR_FILE" ]]; then
 	tar -xvzf baseball.sql.tar.gz
 	rm -rf baseball.sql.tar.gz
 else
@@ -46,7 +48,8 @@ else
 		echo "Please download database and keep the tar file in this directory."
 		exit 1
 	fi
-fi
+fi # end check baseball.sql
+fi # end check baseball.sql.tar.gz
 
 echo "Deleting old database"
 mysql -u root -p${PW} -e "DROP DATABASE baseball"
@@ -54,11 +57,20 @@ mysql -u root -p${PW} -e "DROP DATABASE baseball"
 echo "Creating database"
 mysql -u root -p${PW} -e "CREATE DATABASE baseball"
 
-echo "Loading new database"
+echo "Loading database. This may take a while..."
 mysql -u root -p${PW} baseball < baseball.sql
 
-echo "Loading tables in database"
+echo "Running assignment to load new tables in database"
 mysql -u root -p${PW} baseball < baseball_assignment.sql
+
+while true; do
+read -p "Do you wish to do slower 100 day rolling search? " yn
+case $yn in
+        [Yy]* ) mysql -u root -p${PW} baseball < baseball_assignment_slower.sql; break;;
+        [Nn]* ) echo "Execute mysql -u root -p<pw> baseball < baseball_assignment_slower.sql for standalone test"; break;;
+        * ) echo "Please answer yes or no.";;
+esac
+done
 
 echo "Unit testing"
 mysql -u root -p${PW} baseball < test_baseball_assignment.sql

@@ -46,7 +46,7 @@ CREATE TABLE batter_overall_average
 		batter,
 		sum(Hit) as Hit, 
 		sum(atBat) as atbat, 
-	       	IF(atBat != 0, sum(Hit)/sum(atBat), 0) as historic_avg 
+	       	IF(atBat > 0, sum(Hit)/sum(atBat), 0) as historic_avg	-- giving condition within Select 
 	FROM batter_game_actual_info 
 	GROUP BY batter 
 	ORDER BY batter;
@@ -63,62 +63,43 @@ CREATE TABLE batter_annual_average
 		sum(Hit) as Hit, 
 		sum(atBat) as atbat, 
 		DATE_FORMAT(game_date, '%Y') as year, 
-		IF(atBat != 0, sum(Hit)/sum(atBat), 0) as annual_avg
+		IF(atBat > 0, sum(Hit)/sum(atBat), 0) as annual_avg
 	FROM batter_game_actual_info 
 	GROUP BY batter,year 
 	ORDER BY batter,year;
 
 ----------------------------------------------------------------------------------------------------------------
--- Part III-A: 100 day Rolling Average
+-- Part III-A: 100 day Rolling Average Alternate
+-- 	Tried using partitioning reference : 
+-- 			https://learnsql.com/blog/range-clause/
+--			https://learnsql.com/blog/moving-average-in-sql/
 ----------------------------------------------------------------------------------------------------------------
-SELECT 'Computing 100 day Rolling Average for each batter.' AS '';
-SELECT 'This operation may take 2.5 hours to complete. Please wait...' AS '';
-select now() as 'Current Time';
-DROP TABLE IF EXISTS batter_rolling_100;
-CREATE TABLE batter_rolling_100 
+SELECT 'Computing faster 100 day Rolling Average for each batter.' AS '';
+SELECT now() as 'Current Time';
+DROP TABLE IF EXISTS batter_rolling_100_alternate;
+CREATE TABLE batter_rolling_100_alternate
 	AS
-	SELECT
-		batters_info1.batter,
-		batters_info1.game_date,
-	       	sum(batters_info2.Hit)/sum(batters_info2.atBat) AS 100Day_avg 
-	FROM batter_game_actual_info batters_info1
-       		JOIN batter_game_actual_info batters_info2 
-		ON batters_info1.batter = batters_info2.batter	
-		WHERE batters_info2.game_date BETWEEN batters_info1.100_day_before_date AND DATE(batters_info1.game_date) 
-	GROUP BY batter,game_date
-	ORDER BY batter,game_date;
+	SELECT 
+		DATE(batters_info.game_date) as game_date,
+	        batters_info.batter,
+		batters_info.Hit ,
+	       	batters_info.atBat,
+       		AVG(batters_info.Hit / batters_info.atBat)			-- Suggested as code review comment from buddy	
+     			OVER (							-- Window function. Rows are not collapsed and 
+										-- each row has own window over which calculation is done
 
-SELECT '100 day Rolling Average operation completed !!' AS '';
-select now() as 'Completion Time';
+				PARTITION by batter				-- For each batter
+				ORDER BY game_date				-- Order by date in this case. If the 100dayGameAverage was 
+										-- the question, then we would have order by game_id
+				ROWS BETWEEN 99 PRECEDING AND CURRENT ROW	-- 100 row entries only
+			)
+		        AS 100Day_avg
+	FROM batter_game_actual_info batters_info;
 
-----------------------------------------------------------------------------------------------------------------
--- Part III-B: 100 day Rolling Average Alternate
--- 	Tried using partitioning reference : https://learnsql.com/blog/range-clause/
--- 	but MYSQL 5.8+ versions don't support "PARTITION BY" statement.
---
--- 	As such, I could never test the below code and improve on my timings 
-----------------------------------------------------------------------------------------------------------------
---DROP TABLE IF EXISTS batter_rolling_100_alternate;
---CREATE TABLE batter_rolling_100_alternate
---	AS
---	SELECT 
---		DATE(local_game.local_date) AS game_date,
---	        batters_info.batter,
---     		SUM(batters_info.Hit) OVER (
---				PARTITION BY batters_info.batter 
---	        	    	ORDER BY DATE(local_game.local_date)
---				WHERE batters_info.game_date BETWEEN batters_info.100_day_before_date AND DATE(batters_info.game_date) 
---		) /
---        	SUM(batters_info.atBat) OVER (
---				PARTITION BY batters_info.batter
---			        ORDER BY DATE(local_game.local_date)
---				WHERE batters_info.game_date BETWEEN batters_info.100_day_before_date AND DATE(batters_info.game_date) 
---		)
---	        AS 100Day_avg
---	FROM batter_game_actual_info batters_info
---       	JOIN game local_game 
---		ON batters_info.game_id = local_game.game_id 
---	        WHERE batters_info.atBat > 0
---	GROUP BY game_date, batter
---	ORDER BY game_date;
+	-- No need of joining any other table because batter_game_actual_info table has all necessary information
+	-- ORDER BY game_date; Not required here because we already created windows and ordered them by date.
+
+SELECT '100 day Rolling Average faster operation completed !!' AS '';
+SELECT now() as 'Completion Time';
+
 

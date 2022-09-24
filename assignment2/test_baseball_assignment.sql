@@ -29,9 +29,9 @@ SELECT 'Checking Annual Average of batter=110029' AS '';
 SELECT * FROM batter_annual_average WHERE batter=110029 limit 0,10;
 
 -- Unit Test 
-SELECT '***************************Rolling Average of 110029 **********************' AS '';
+SELECT '***************Rolling Average of 110029 with fast algorithm**************' AS '';
 SELECT 'Checking 100 day Rolling Average of batter=110029' AS '';
-SELECT * from batter_rolling_100 where batter = 110029 limit 0,50;
+SELECT * from batter_rolling_100_alternate  where batter = 110029 limit 0,50;
 
 SELECT 'Checking 100 day Rolling Average of batter=110029 with date=2010-05-18' AS '';
-SELECT * from batter_rolling_100 where batter = 110029 and game_date ='2010-05-18' limit 0,50;
+SELECT * from batter_rolling_100_alternate where batter = 110029 and game_date ='2010-05-18' limit 0,50;
