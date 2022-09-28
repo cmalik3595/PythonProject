@@ -2,3 +2,7 @@ numpy
 pandas
 sklearn
 plotly
+matplotlib
+mariadb
+sqlalchemy
+mysql
