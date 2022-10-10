@@ -1,0 +1,21 @@
+Description
+
+This package is as a part of Assignment3 of BDA-602 course.
+
+The implementation uses Spark with Python through pyspark library. The baseball
+database is used to calculate the 100 day rolling average of a particular batter.
+
+Usage:
+
+1. Load the database using load_database.sh
+2. Start the Assignment using start_test.sh
+   2.1 The script will load the python environment and update jars
+   2.2 The script will proceed to execute the python script which has
+   spark implementation.
+
+Files
+user_privilege.sql: Allows privilleges in root.
+batter_rolling_avg_transformer.py: Transformer of Rolling average
+baseball_spark.py: Main python implementation
+start_test.sh: Start script
+load_database.sh: Load database

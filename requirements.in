@@ -6,3 +6,7 @@ matplotlib
 mariadb
 sqlalchemy
 mysql
+pyspark
+pyspark-stubs
+mysql-connector
+mysqlclient
