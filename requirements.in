@@ -10,3 +10,4 @@ pyspark
 pyspark-stubs
 mysql-connector
 mysqlclient
+statsmodels
