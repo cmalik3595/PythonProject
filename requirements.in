@@ -11,3 +11,4 @@ pyspark-stubs
 mysql-connector
 mysqlclient
 statsmodels
+scikit-learn
