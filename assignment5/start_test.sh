@@ -26,10 +26,10 @@ fi
 
 if [[ $EUID -ne 0 ]]; then
         echo "This script must be run as root"
-        exit 1;
+#        exit 1;
 fi
 
-echo "Starting Assgnment 2 script. Please wait to enter root password"
+echo "Starting Assgnment 5 script. Please wait to enter root password"
 # Download the database if DB sql file is not present 
 if ! [[ -f "$BASEBALL_SQL_BASEBALL_TAR_FILE" ]]; then
 if [[ -f "$BASEBALL_TAR_FILE" ]]; then
@@ -60,11 +60,12 @@ mysql -u root -p${PW} -e "CREATE DATABASE baseball"
 echo "Loading database. This may take a while..."
 mysql -u root -p${PW} baseball < baseball.sql
 
-apt-get install -y python3-pymysql
+mysql -u root -p${PW} baseball < load_pitcher.sql
 
 echo "Running assignment to load new tables in database"
-mkdir -p results/pre-analysis
-python3 hw5-brute.py
+mkdir -p output 
+
+python3 assignment.py
 
 echo "Test complete. Cleanup repository"
 rm baseball.sql
