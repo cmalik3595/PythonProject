@@ -76,9 +76,8 @@ def perf_table(model_names, predictions, y_test, i):
             }
         )
 
-    with open(
-        "./output/model-comparison/pca_performance_table_{i}.html", "w"
-    ) as html_open:
+    perf_file_save = f"./output/model-comparison/pca_performance_table_{i}.html"
+    with open(perf_file_save, "w") as html_open:
         pca_performance.sort_index().to_html(html_open, escape=False)
 
     return
