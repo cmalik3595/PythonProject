@@ -47,7 +47,7 @@ def model_plot(prob, y_test, model_name, i):
     fig.update_yaxes(scaleanchor="x", scaleratio=1)
     fig.update_xaxes(constrain="domain")
 
-    fig_roc_file_save = f"./output/model-comparison/{model_name}_{i}_roc.html"
+    fig_roc_file_save = f"./output/model-comparison/plots/{model_name}_{i}_roc.html"
     fig.write_html(file=fig_roc_file_save, include_plotlyjs="cdn")
 
     return

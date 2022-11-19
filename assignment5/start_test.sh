@@ -63,7 +63,9 @@ mysql -u root -p${PW} baseball < baseball.sql
 mysql -u root -p${PW} baseball < load_pitcher.sql
 
 echo "Running assignment to load new tables in database"
-mkdir -p output 
+mkdir -p output/career/plots 
+mkdir -p output/100-day/plots 
+mkdir -p output/model-comparison/plots 
 
 python3 assignment.py
 

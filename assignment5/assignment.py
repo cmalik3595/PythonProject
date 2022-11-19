@@ -58,6 +58,9 @@ def main() -> int:
     if not os.path.exists("output/model-comparison"):
         os.makedirs("output/model-comparison")
 
+    if not os.path.exists("output/model-comparison/plots"):
+        os.makedirs("output/model-comparison/plots")
+
     if not os.path.exists("output/100-day"):
         os.makedirs("output/100-day")
 
