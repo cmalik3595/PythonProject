@@ -55,6 +55,14 @@ def main() -> int:
     if not os.path.exists("output"):
         os.makedirs("output")
 
+    if not os.path.exists("output/model-comparison"):
+        os.makedirs("output/model-comparison")
+
+    if not os.path.exists("output/100-day"):
+        os.makedirs("output/100-day")
+
+    if not os.path.exists("output/career"):
+        os.makedirs("output/career")
     response_series, roll_predictor_list, career_predictor_list = load()
 
     predictor_processing(roll_predictor_list, career_predictor_list, response_series)
@@ -184,11 +192,9 @@ def main() -> int:
         "hr9_difference",
     ]
     print("Model from 100-day stats:")
-    models.build_models(roll_predictor_list[features], response_series)
+    models.build_models(roll_predictor_list[features], response_series, 1)
     print("Model from prior career stats:")
-    models.build_models(career_predictor_list[features], response_series)
-    print("A linearSVC appeard to perform slightly better than an RFC.")
-    print("100-day rolling stats and career stats appear to perform the same.")
+    models.build_models(career_predictor_list[features], response_series, 2)
 
     return 0
 
