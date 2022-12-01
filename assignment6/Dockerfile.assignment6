@@ -1,0 +1,15 @@
+FROM alpine:latest
+
+RUN mkdir -p /data
+RUN mkdir -p /scripts
+RUN mkdir -p /results
+
+COPY ./baseball.sql /data/baseball.sql
+COPY ./baseball_assignment.sql /scripts/baseball_assignment.sql
+COPY ./docker-test_script.sh /scripts/docker-test_script.sh
+
+RUN apk update \
+    && apk add mysql-client \
+    && chmod +x /scripts/docker-test_script.sh
+
+CMD sh -x /scripts/docker-test_script.sh
