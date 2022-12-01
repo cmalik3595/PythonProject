@@ -3,12 +3,15 @@ pandas
 sklearn
 plotly
 matplotlib
-mariadb
+mariadb==1.1.4
 sqlalchemy
 mysql
 pyspark
 pyspark-stubs
 mysql-connector
 mysqlclient
+xgboost
+pymysql
+jinja2
 statsmodels
 scikit-learn
