@@ -1,0 +1,49 @@
+version: "3.3"
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ALLOW_EMPTY_PASSWORD=TRUE
+      - secure-file-priv=""
+      - TZ=America/Los_Angeles
+      - SQL_CLIENT_PORT=3307
+    command: --performance-schema --secure-file-priv="" --default-authentication-plugin=mysql_native_password
+    volumes:
+      - "./db:/var/lib/mysql/"
+      - "./custom.cnf:/etc/mysql/conf.d/my.cnf"
+    ports:
+      - 3307:3307
+    expose:
+      - "3307"
+    hostname: mariadb
+    networks:
+      assignment6-net:
+        aliases:
+          - mariadb
+
+  assignment6_client:
+    image: assignment6:client
+    container_name: assignment6_client
+    depends_on: [mariadb]
+    build:
+      context: .
+      dockerfile: Dockerfile.assignment6
+    ports:
+      - "8000:8000"
+        #tty: true
+        #stdin_open: true
+        #entrypoint:
+        #- sh
+    volumes:
+      - "./docker-results:/results"
+    networks:
+      assignment6-net:
+        aliases:
+          - client
+
+networks:
+  assignment6-net:
