@@ -9,8 +9,15 @@ warnings.simplefilter(action="ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 def sql_connect() -> pymysql.connections.Connection:
-    sql_engine = pymysql.connect("mariadb", "root", "", "baseball")
+    sql_engine = pymysql.connect(
+            host='mariadb',
+            port=3306,
+            user='root',
+            password='',
+            database='baseball');
+
     return sql_engine
+
 
 def sql_disconnect(sql_engine: pymysql.connections.Connection):
     sql_engine.close()
