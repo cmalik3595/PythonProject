@@ -33,11 +33,17 @@ services:
       - "5001:8080"
         #tty: true
         #stdin_open: true
-        #entrypoint:
-        #- sh
+        #entrypoint: bash
     volumes:
       - "./output:/results"
-    command: ["bash", "/scripts/run.sh"]
+    command:
+      [
+        "/scripts/wait-for-mariadb.sh",
+        "mariadb:3306",
+        "--",
+        "bash",
+        "/scripts/run.sh",
+      ]
     networks:
       final-net:
         aliases:
