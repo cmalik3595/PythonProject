@@ -1,0 +1,47 @@
+version: "3.3"
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+    command: --performance-schema --secure-file-priv="" --default-authentication-plugin=mysql_native_password
+    volumes:
+      - "./db:/var/lib/mysql/"
+    ports:
+      - "5000:3306"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ALLOW_EMPTY_PASSWORD=TRUE
+      - secure-file-priv=""
+      - TZ=America/Los_Angeles
+    hostname: mariadb
+    networks:
+      final-net:
+        aliases:
+          - mariadb
+
+  final_client:
+    image: final:client
+    container_name: final_client
+    depends_on: [mariadb]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: "no"
+    ports:
+      - "5001:8080"
+        #tty: true
+        #stdin_open: true
+        #entrypoint:
+        #- sh
+    volumes:
+      - "./output:/results"
+    command: ["bash", "/scripts/run.sh"]
+    networks:
+      final-net:
+        aliases:
+          - client
+
+networks:
+  final-net:
