@@ -3,7 +3,7 @@ pandas
 sklearn
 plotly
 matplotlib
-mariadb==1.1.4
+mariadb==1.1.5
 sqlalchemy
 mysql
 pyspark
